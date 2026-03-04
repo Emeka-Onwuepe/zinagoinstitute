@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zinago Legal Research Institute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1e293b;
+            --accent: #d97706;
+            --cream: #fafaf9;
+            --stone: #78716c;
+            --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cream);
+            overflow-x: hidden;
+        }
+        
+        .serif {
+            font-family: 'Crimson Text', serif;
+        }
+        
+        /* Grain Texture Overlay */
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        /* Navigation Blur */
+        .nav-blur {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        /* Hero Animations */
+        .hero-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s var(--transition-smooth) forwards;
+        }
+        
+        .hero-animate-delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .hero-animate-delay-2 {
+            animation-delay: 0.4s;
+        }
+        
+        .hero-animate-delay-3 {
+            animation-delay: 0.6s;
+        }
+        
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s var(--transition-smooth);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Stagger Children */
+        .stagger-children > * {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s var(--transition-smooth);
+        }
+        
+        .stagger-children.active > *:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+        .stagger-children.active > *:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+        .stagger-children.active > *:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+        .stagger-children.active > *:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+        .stagger-children.active > *:nth-child(5) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+        .stagger-children.active > *:nth-child(6) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
+        
+        /* Research Cards */
+        .research-card {
+            transition: all 0.5s var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .research-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(217, 119, 6, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .research-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .research-card:hover::before {
+            opacity: 1;
+        }
+        
+        .research-card .icon-wrapper {
+            transition: all 0.3s ease;
+        }
+        
+        .research-card:hover .icon-wrapper {
+            background-color: rgb(254 243 199);
+        }
+        
+        .research-card:hover .icon-wrapper svg {
+            color: rgb(180 83 9);
+        }
+        
+        .research-card:hover h3 {
+            color: rgb(180 83 9);
+        }
+        
+        /* Magnetic Links */
+        .magnetic-link {
+            transition: transform 0.3s var(--transition-smooth);
+            display: inline-block;
+        }
+        
+        /* Hover Underline */
+        .hover-underline {
+            position: relative;
+        }
+        
+        .hover-underline::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .hover-underline:hover::after {
+            width: 100%;
+        }
+        
+        /* Scholar Cards */
+        .scholar-card img {
+            filter: grayscale(100%);
+            transition: all 0.7s ease;
+        }
+        
+        .scholar-card:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+        
+        .scholar-card .overlay {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .scholar-card:hover .overlay {
+            opacity: 1;
+        }
+        
+        /* Event Cards */
+        .event-card {
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover {
+            border-color: rgb(217 119 6);
+            background-color: white;
+        }
+        
+        .event-card:hover h3 {
+            color: rgb(180 83 9);
+        }
+        
+        /* Animated Background */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+        
+        .hero-bg svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .wave {
+            animation: wave 20s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { d: path("M0,50 Q25,30 50,50 T100,50 L100,100 L0,100 Z"); }
+            50% { d: path("M0,50 Q25,70 50,50 T100,50 L100,100 L0,100 Z"); }
+        }
+        
+        /* Counter Animation */
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d97706, transparent);
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.5s var(--transition-smooth);
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Button Hover Effects */
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: rgb(217 119 6);
+        }
+        
+        .btn-secondary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            border-color: #1e293b;
+        }
+        
+        /* News Article Hover */
+        .news-article {
+            transition: all 0.3s ease;
+        }
+        
+        .news-article:hover h3 {
+            color: rgb(180 83 9);
+        }
+        
+        /* Smooth Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <div class="grain"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-500 top-0 bg-transparent">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-slate-900 rounded-sm flex items-center justify-center">
+                        <span class="text-amber-500 font-bold serif text-xl">Z</span>
+                    </div>
+                    <span class="serif text-xl font-semibold text-slate-900 tracking-tight">Zinago Institute</span>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#research" class="magnetic-link text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hover-underline">Research Areas</a>
+                    <a href="#publications" class="magnetic-link text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hover-underline">Publications</a>
+                    <a href="#scholars" class="magnetic-link text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hover-underline">Scholars</a>
+                    <a href="#events" class="magnetic-link text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hover-underline">Events</a>
+                    <button class="btn-primary bg-slate-900 text-white px-6 py-2.5 text-sm font-medium">
+                        Access Database
+                    </button>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2 hover:bg-slate-100 rounded transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-slate-50 z-30 md:hidden pt-24 px-6">
+        <div class="flex flex-col gap-6">
+            <a href="#research" class="mobile-link text-2xl serif font-medium text-slate-900 hover:text-amber-600 transition-colors">Research Areas</a>
+            <a href="#publications" class="mobile-link text-2xl serif font-medium text-slate-900 hover:text-amber-600 transition-colors">Publications</a>
+            <a href="#scholars" class="mobile-link text-2xl serif font-medium text-slate-900 hover:text-amber-600 transition-colors">Scholars</a>
+            <a href="#events" class="mobile-link text-2xl serif font-medium text-slate-900 hover:text-amber-600 transition-colors">Events</a>
+            <button class="bg-slate-900 text-white px-6 py-3 text-lg font-medium mt-4 hover:bg-amber-600 transition-colors">Access Database</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="hero-bg">
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-100/50 to-slate-50/80"></div>
+            <div class="absolute top-0 left-0 w-full h-full opacity-30">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path class="wave" fill="#e7e5e4" opacity="0.5" d="M0,50 Q25,30 50,50 T100,50 L100,100 L0,100 Z"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 text-center">
+            <div class="mb-6 inline-block hero-animate">
+                <span class="text-amber-600 text-sm font-semibold tracking-[0.2em] uppercase border-b-2 border-amber-600 pb-1">Est. 1985</span>
+            </div>
+            
+            <h1 class="serif text-5xl md:text-7xl lg:text-8xl font-bold text-slate-900 leading-[0.9] mb-8 text-balance hero-animate hero-animate-delay-1">
+                Advancing Legal<br>
+                <span class="italic text-slate-600">Scholarship</span> & Practice
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-12 leading-relaxed hero-animate hero-animate-delay-2">
+                An independent research institute dedicated to rigorous analysis of contemporary legal challenges, shaping policy through evidence-based scholarship.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center hero-animate hero-animate-delay-3">
+                <button class="btn-primary group bg-slate-900 text-white px-8 py-4 text-sm font-semibold tracking-wide flex items-center gap-2">
+                    Explore Research
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </button>
+                <button class="btn-secondary px-8 py-4 text-sm font-semibold text-slate-700 border border-slate-300">
+                    View Annual Report
+                </button>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 bg-white border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 stagger-children" id="stats-container">
+                <div class="text-center reveal">
+                    <div class="serif text-4xl md:text-5xl font-bold text-slate-900 mb-2 stat-number" data-target="340">0</div>
+                    <div class="text-sm text-slate-500 uppercase tracking-wider">Published Works</div>
+                </div>
+                <div class="text-center reveal">
+                    <div class="serif text-4xl md:text-5xl font-bold text-slate-900 mb-2 stat-number" data-target="56">0</div>
+                    <div class="text-sm text-slate-500 uppercase tracking-wider">Fellows</div>
+                </div>
+                <div class="text-center reveal">
+                    <div class="serif text-4xl md:text-5xl font-bold text-slate-900 mb-2 stat-number" data-target="128">0</div>
+                    <div class="text-sm text-slate-500 uppercase tracking-wider">Global Partners</div>
+                </div>
+                <div class="text-center reveal">
+                    <div class="serif text-4xl md:text-5xl font-bold text-slate-900 mb-2 stat-number" data-target="42">0</div>
+                    <div class="text-sm text-slate-500 uppercase tracking-wider">Years of Impact</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Areas -->
+    <section id="research" class="py-32 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6 reveal">
+                <div class="max-w-2xl">
+                    <span class="text-amber-600 text-sm font-semibold tracking-widest uppercase mb-4 block">Focus Areas</span>
+                    <h2 class="serif text-4xl md:text-5xl font-bold text-slate-900 mb-4">Research Divisions</h2>
+                    <p class="text-slate-600 text-lg">Interdisciplinary inquiry into the most pressing legal questions of our time.</p>
+                </div>
+                <a href="#" class="text-slate-900 font-semibold hover:text-amber-600 transition-colors flex items-center gap-2 group">
+                    View All Research
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children" id="research-grid">
+                <!-- Card 1 -->
+                <article class="research-card group relative bg-white p-8 border border-slate-200 cursor-pointer">
+                    <div class="icon-wrapper w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-slate-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-slate-900 mb-3 transition-colors">Constitutional Law</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">Examining the architecture of governance, rights protection, and the evolving relationship between state power and individual liberty.</p>
+                    <div class="flex items-center text-sm font-medium text-slate-400 group-hover:text-amber-600 transition-colors">
+                        <span>24 Active Projects</span>
+                        <span class="mx-2">•</span>
+                        <span>8 Fellows</span>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="research-card group relative bg-white p-8 border border-slate-200 cursor-pointer">
+                    <div class="icon-wrapper w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-slate-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-slate-900 mb-3 transition-colors">International Law</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">Analysis of transnational legal frameworks, human rights mechanisms, and the law of armed conflict in an interconnected world.</p>
+                    <div class="flex items-center text-sm font-medium text-slate-400 group-hover:text-amber-600 transition-colors">
+                        <span>18 Active Projects</span>
+                        <span class="mx-2">•</span>
+                        <span>12 Fellows</span>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="research-card group relative bg-white p-8 border border-slate-200 cursor-pointer">
+                    <div class="icon-wrapper w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-slate-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-slate-900 mb-3 transition-colors">Technology & Law</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">Investigating the legal implications of artificial intelligence, data privacy, and digital governance structures.</p>
+                    <div class="flex items-center text-sm font-medium text-slate-400 group-hover:text-amber-600 transition-colors">
+                        <span>31 Active Projects</span>
+                        <span class="mx-2">•</span>
+                        <span>15 Fellows</span>
+                    </div>
+                </article>
+
+                <!-- Card 4 -->
+                <article class="research-card group relative bg-white p-8 border border-slate-200 cursor-pointer">
+                    <div class="icon-wrapper w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-slate-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-slate-900 mb-3 transition-colors">Corporate Governance</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">Research on regulatory frameworks, shareholder rights, and the social responsibilities of corporate entities.</p>
+                    <div class="flex items-center text-sm font-medium text-slate-400 group-hover:text-amber-600 transition-colors">
+                        <span>15 Active Projects</span>
+                        <span class="mx-2">•</span>
+                        <span>6 Fellows</span>
+                    </div>
+                </article>
+
+                <!-- Card 5 -->
+                <article class="research-card group relative bg-white p-8 border border-slate-200 cursor-pointer">
+                    <div class="icon-wrapper w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-slate-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-slate-900 mb-3 transition-colors">Environmental Law</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">Climate litigation, sustainability regulations, and the intersection of environmental science and legal frameworks.</p>
+                    <div class="flex items-center text-sm font-medium text-slate-400 group-hover:text-amber-600 transition-colors">
+                        <span>22 Active Projects</span>
+                        <span class="mx-2">•</span>
+                        <span>9 Fellows</span>
+                    </div>
+                </article>
+
+                <!-- Card 6 -->
+                <article class="research-card group relative bg-white p-8 border border-slate-200 cursor-pointer">
+                    <div class="icon-wrapper w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-slate-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-slate-900 mb-3 transition-colors">Economic Regulation</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">Antitrust policy, financial regulation, and the legal structures shaping market competition and consumer protection.</p>
+                    <div class="flex items-center text-sm font-medium text-slate-400 group-hover:text-amber-600 transition-colors">
+                        <span>19 Active Projects</span>
+                        <span class="mx-2">•</span>
+                        <span>7 Fellows</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Publication -->
+    <section id="publications" class="py-32 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="order-2 lg:order-1 reveal">
+                    <span class="text-amber-600 text-sm font-semibold tracking-widest uppercase mb-4 block">Featured Publication</span>
+                    <h2 class="serif text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">The Architecture of Digital Constitutionalism</h2>
+                    <p class="text-slate-600 text-lg mb-8 leading-relaxed">
+                        A comprehensive examination of how constitutional principles adapt to the digital age, exploring the tension between state sovereignty and platform governance in the modern regulatory landscape.
+                    </p>
+                    
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-12 h-12 bg-slate-200 rounded-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Author" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <div class="font-semibold text-slate-900">Prof. Elena Vostokova</div>
+                            <div class="text-sm text-slate-500">Director of Technology & Law</div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button class="btn-primary bg-slate-900 text-white px-6 py-3 text-sm font-semibold">
+                            Read Full Text
+                        </button>
+                        <button class="btn-secondary border border-slate-300 text-slate-700 px-6 py-3 text-sm font-semibold">
+                            Download PDF
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="order-1 lg:order-2 relative reveal">
+                    <div class="absolute -inset-4 bg-amber-100/50 rounded-lg transform rotate-3 transition-transform hover:rotate-6 duration-500"></div>
+                    <div class="relative bg-slate-900 p-8 md:p-12 rounded-lg shadow-2xl">
+                        <div class="aspect-[3/4] bg-slate-800 rounded flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900"></div>
+                            <div class="relative text-center p-8">
+                                <div class="w-16 h-16 border-2 border-amber-500 rounded-full mx-auto mb-6 flex items-center justify-center">
+                                    <span class="text-amber-500 font-bold text-2xl serif">Z</span>
+                                </div>
+                                <h3 class="serif text-2xl text-white font-bold mb-2">Zinago</h3>
+                                <div class="w-12 h-0.5 bg-amber-500 mx-auto mb-4"></div>
+                                <p class="text-slate-400 text-sm uppercase tracking-widest">Law Review</p>
+                                <p class="text-slate-500 text-xs mt-8">Vol. 42 • No. 3 • 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scholars Spotlight -->
+    <section id="scholars" class="py-32 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="text-amber-600 text-sm font-semibold tracking-widest uppercase mb-4 block">Our People</span>
+                <h2 class="serif text-4xl md:text-5xl font-bold text-slate-900 mb-4">Distinguished Fellows</h2>
+                <p class="text-slate-600 text-lg">Leading scholars advancing the frontiers of legal understanding through rigorous interdisciplinary research.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 stagger-children" id="scholars-grid">
+                <!-- Scholar 1 -->
+                <div class="scholar-card group cursor-pointer">
+                    <div class="relative overflow-hidden mb-6 bg-slate-200 aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=600&fit=crop" alt="Dr. Sarah Chen" class="w-full h-full object-cover">
+                        <div class="overlay absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent flex items-end p-6">
+                            <p class="text-white text-sm">Specializing in comparative constitutional law and judicial review mechanisms.</p>
+                        </div>
+                    </div>
+                    <h3 class="serif text-xl font-bold text-slate-900">Dr. Sarah Chen</h3>
+                    <p class="text-amber-600 text-sm font-medium mb-2">Senior Fellow</p>
+                    <p class="text-slate-600 text-sm">Constitutional Law Division</p>
+                </div>
+
+                <!-- Scholar 2 -->
+                <div class="scholar-card group cursor-pointer">
+                    <div class="relative overflow-hidden mb-6 bg-slate-200 aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=600&fit=crop" alt="Prof. Marcus Webb" class="w-full h-full object-cover">
+                        <div class="overlay absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent flex items-end p-6">
+                            <p class="text-white text-sm">Expert in international arbitration and cross-border dispute resolution.</p>
+                        </div>
+                    </div>
+                    <h3 class="serif text-xl font-bold text-slate-900">Prof. Marcus Webb</h3>
+                    <p class="text-amber-600 text-sm font-medium mb-2">Distinguished Professor</p>
+                    <p class="text-slate-600 text-sm">International Law Division</p>
+                </div>
+
+                <!-- Scholar 3 -->
+                <div class="scholar-card group cursor-pointer">
+                    <div class="relative overflow-hidden mb-6 bg-slate-200 aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=600&fit=crop" alt="Dr. Amara Okafor" class="w-full h-full object-cover">
+                        <div class="overlay absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent flex items-end p-6">
+                            <p class="text-white text-sm">Pioneering research in AI governance and algorithmic accountability.</p>
+                        </div>
+                    </div>
+                    <h3 class="serif text-xl font-bold text-slate-900">Dr. Amara Okafor</h3>
+                    <p class="text-amber-600 text-sm font-medium mb-2">Research Director</p>
+                    <p class="text-slate-600 text-sm">Technology & Law Division</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 reveal">
+                <button class="border-b-2 border-slate-900 text-slate-900 font-semibold pb-1 hover:text-amber-600 hover:border-amber-600 transition-colors">
+                    View All Scholars
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events & News -->
+    <section id="events" class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <!-- Upcoming Events -->
+                <div class="reveal">
+                    <span class="text-amber-600 text-sm font-semibold tracking-widest uppercase mb-4 block">Calendar</span>
+                    <h2 class="serif text-3xl font-bold text-slate-900 mb-8">Upcoming Events</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="event-card flex gap-6 p-6 border border-slate-200 cursor-pointer bg-slate-50">
+                            <div class="flex-shrink-0 text-center">
+                                <div class="text-3xl font-bold text-slate-900 serif">15</div>
+                                <div class="text-sm text-slate-500 uppercase">Mar</div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 mb-2 transition-colors">Symposium on Digital Rights</h3>
+                                <p class="text-slate-600 text-sm mb-2">A two-day conference examining privacy in the age of surveillance capitalism.</p>
+                                <div class="flex items-center gap-2 text-xs text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    <span>Main Auditorium</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="event-card flex gap-6 p-6 border border-slate-200 cursor-pointer bg-slate-50">
+                            <div class="flex-shrink-0 text-center">
+                                <div class="text-3xl font-bold text-slate-900 serif">22</div>
+                                <div class="text-sm text-slate-500 uppercase">Mar</div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 mb-2 transition-colors">Workshop: Climate Litigation</h3>
+                                <p class="text-slate-600 text-sm mb-2">Practical strategies for environmental legal advocacy and policy change.</p>
+                                <div class="flex items-center gap-2 text-xs text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    <span>Seminar Room B</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="event-card flex gap-6 p-6 border border-slate-200 cursor-pointer bg-slate-50">
+                            <div class="flex-shrink-0 text-center">
+                                <div class="text-3xl font-bold text-slate-900 serif">05</div>
+                                <div class="text-sm text-slate-500 uppercase">Apr</div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 mb-2 transition-colors">Annual Lecture: Justice & AI</h3>
+                                <p class="text-slate-600 text-sm mb-2">Keynote by Hon. Justice Maria Santos on algorithmic decision-making in courts.</p>
+                                <div class="flex items-center gap-2 text-xs text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    <span>Grand Hall</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest News -->
+                <div class="reveal">
+                    <span class="text-amber-600 text-sm font-semibold tracking-widest uppercase mb-4 block">Updates</span>
+                    <h2 class="serif text-3xl font-bold text-slate-900 mb-8">Latest News</h2>
+                    
+                    <div class="space-y-8">
+                        <article class="news-article group cursor-pointer">
+                            <div class="text-sm text-slate-400 mb-2">February 28, 2024</div>
+                            <h3 class="serif text-xl font-bold text-slate-900 mb-2 transition-colors">Institute Receives Major Grant for Climate Law Research</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-3">The $2.5M funding will support a three-year study on transnational climate litigation strategies and their impact on corporate accountability.</p>
+                            <span class="text-amber-600 text-sm font-medium group-hover:underline">Read more →</span>
+                        </article>
+
+                        <div class="divider"></div>
+
+                        <article class="news-article group cursor-pointer">
+                            <div class="text-sm text-slate-400 mb-2">February 15, 2024</div>
+                            <h3 class="serif text-xl font-bold text-slate-900 mb-2 transition-colors">New Partnership with Geneva Academy</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-3">Collaborative initiative to strengthen international humanitarian law education and research capacity in the Global South.</p>
+                            <span class="text-amber-600 text-sm font-medium group-hover:underline">Read more →</span>
+                        </article>
+
+                        <div class="divider"></div>
+
+                        <article class="news-article group cursor-pointer">
+                            <div class="text-sm text-slate-400 mb-2">February 8, 2024</div>
+                            <h3 class="serif text-xl font-bold text-slate-900 mb-2 transition-colors">Publication: The Future of Legal Education</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-3">White paper proposing reforms to legal pedagogy to address emerging technological and social challenges.</p>
+                            <span class="text-amber-600 text-sm font-medium group-hover:underline">Read more →</span>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-24 bg-slate-900 text-white">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center reveal">
+            <h2 class="serif text-3xl md:text-4xl font-bold mb-4">Stay Informed</h2>
+            <p class="text-slate-400 mb-8 max-w-xl mx-auto">Subscribe to our quarterly digest of research highlights, upcoming events, and policy briefs.</p>
+            
+            <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto" id="newsletter-form">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-3 bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors" required>
+                <button type="submit" class="bg-amber-600 text-white px-8 py-3 font-semibold hover:bg-amber-700 transition-colors">
+                    Subscribe
+                </button>
+            </form>
+            
+            <p class="text-slate-500 text-xs mt-4">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-16 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 bg-slate-800 rounded-sm flex items-center justify-center">
+                            <span class="text-amber-500 font-bold serif">Z</span>
+                        </div>
+                        <span class="serif text-lg font-semibold text-white">Zinago Institute</span>
+                    </div>
+                    <p class="text-sm leading-relaxed mb-6 max-w-sm">
+                        Advancing legal scholarship through rigorous research, fostering dialogue between academia and practice, and shaping the future of justice.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center hover:bg-amber-600 transition-colors text-white">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center hover:bg-amber-600 transition-colors text-white">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Research</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Working Papers</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Books & Journals</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Policy Briefs</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Data Sets</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Institute</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Fellowships</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+                <p>&copy; 2024 Zinago Legal Research Institute. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
+                    <a href="#" class="hover:text-white transition-colors">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('bg-white/90', 'nav-blur', 'shadow-sm');
+                navbar.classList.remove('bg-transparent');
+            } else {
+                navbar.classList.remove('bg-white/90', 'nav-blur', 'shadow-sm');
+                navbar.classList.add('bg-transparent');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let menuOpen = false;
+
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            if (menuOpen) {
+                mobileMenu.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+
+        // Close mobile menu when clicking links
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMenu();
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Handle stagger children
+                    if (entry.target.classList.contains('stagger-children')) {
+                        entry.target.classList.add('active');
+                    }
+                    
+                    // Handle stats counter
+                    if (entry.target.querySelector('.stat-number')) {
+                        animateCounters(entry.target);
+                    }
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all reveal elements
+        document.querySelectorAll('.reveal, .stagger-children').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Counter animation
+        function animateCounters(container) {
+            const counters = container.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
+
+        // Magnetic effect for nav links
+        const magneticLinks = document.querySelectorAll('.magnetic-link');
+        
+        magneticLinks.forEach(link => {
+            link.addEventListener('mousemove', (e) => {
+                const rect = link.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                link.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+            
+            link.addEventListener('mouseleave', () => {
+                link.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // Newsletter form
+        document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = e.target.querySelector('input[type="email"]').value;
+            alert(`Thank you for subscribing with: ${email}`);
+            e.target.reset();
+        });
+
+        // Smooth scroll polyfill for Safari
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add loaded class for initial animations
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>
